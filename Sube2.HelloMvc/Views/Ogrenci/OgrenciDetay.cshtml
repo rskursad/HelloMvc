@@ -1,0 +1,57 @@
+﻿@model OgrenciDetayDTO
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>OgrenciDetay</title>
+</head>
+<body>
+    @if (ViewData["ogr"] != null && ViewBag.Teacher != null)
+    {
+        <p>
+            ViewData'nın getirdiği bilgi: @(((Ogrenci)ViewData["ogr"]!).Ad)
+        </p>
+        <p>
+            Danışman İsmi:@ViewBag.Teacher.Ad
+        </p>
+    }
+    else
+    {
+        <p>Öğrenci Bulunamadı!</p>
+    }
+
+    @if (ViewBag.Student != null && ViewBag.Teacher != null)
+    {
+        <p>
+            ViewBag'in getirdiği bilgi: @ViewBag.Student.Ad
+        </p>
+        <p>
+            Danışman İsmi:@ViewBag.Teacher.Ad
+        </p>
+    }
+    else
+    {
+        <p>Öğrenci Bulunamadı!</p>
+    }
+
+    @if (Model != null)
+    {
+        <p>
+            Model'in getirdiği öğrenci bilgisi: @Model.Ogrenci.Ad
+        </p>
+        <p>
+            Model'in getirdiği danışman bilgisi: @Model.Ogretmen.Ad
+        </p>
+    }
+    else
+    {
+        <p>Öğrenci Bulunamadı!</p>
+    }
+
+</body>
+</html>
