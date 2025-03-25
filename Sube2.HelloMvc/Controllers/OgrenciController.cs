@@ -45,6 +45,19 @@ namespace Sube2.HelloMvc.Controllers
             return View(lst);
         }
 
+        [HttpGet]
+        public ViewResult OgrenciEkle()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public ViewResult OgrenciEkle(Ogrenci ogr)
+        {
+            //DB'ye ekleme işlemleri
+            return View();
+        }
     }
 }
 
