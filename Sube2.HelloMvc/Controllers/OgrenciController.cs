@@ -48,14 +48,30 @@ namespace Sube2.HelloMvc.Controllers
         [HttpGet]
         public ViewResult OgrenciEkle()
         {
-
             return View();
         }
 
         [HttpPost]
         public ViewResult OgrenciEkle(Ogrenci ogr)
         {
-            //DB'ye ekleme işlemleri
+            int sonuc = 0;
+            if (ogr != null)
+            {
+                using (var ctx = new OkulDbContext())
+                {
+                    ctx.Ogrenciler.Add(ogr);
+                    sonuc = ctx.SaveChanges();
+                }
+            }
+
+            if (sonuc > 0)
+            {
+                TempData["sonuc"] = true;
+            }
+            else
+            {
+                TempData["sonuc"] = false;
+            }
             return View();
         }
     }

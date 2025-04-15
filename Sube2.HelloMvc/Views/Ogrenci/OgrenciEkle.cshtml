@@ -1,4 +1,4 @@
-﻿@model Ogrenci 
+﻿@model Ogrenci
 @{
     ViewData["Title"] = "OgrenciEkle";
 }
@@ -8,7 +8,7 @@
 <form asp-action="OgrenciEkle" asp-controller="Ogrenci" method="post">
     <div class="mb-3">
         <label class="form-label" asp-for="Ad"></label>
-        <input class="form-control" type="text" asp-for="Ad"/>
+        <input class="form-control" type="text" asp-for="Ad" />
     </div>
     <div class="mb-3">
         <label class="form-label" asp-for="Soyad"></label>
@@ -16,4 +16,18 @@
     </div>
     <input type="submit" class="btn btn-success" value="Kaydet" />
 </form>
+
+@if (TempData["sonuc"] != null && (bool)TempData["sonuc"]! == true)
+{
+    <script>
+        alert('Öğrenci Ekleme Başarılı');
+    </script>
+}
+else if (TempData["sonuc"] != null && (bool)TempData["sonuc"]! == false)
+{
+    <script>
+        alert('Öğrenci Ekleme Başarısız!');
+    </script>
+}
+
 
