@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Sube2.HelloMvc.Models;
 using Sube2.HelloMvc.Models.ViewModels;
 
@@ -11,38 +12,36 @@ namespace Sube2.HelloMvc.Controllers
             return View("AnaSayfa");
         }
 
-        public ViewResult OgrenciDetay(int id)
-        {
-            Ogrenci ogrenci = null;
-            Ogretmen ogrt = null;
-            if (id == 1)
-            {
-                ogrenci = new Ogrenci { Ad = "Ali", Soyad = "Veli", Ogrenciid = 1 };
-                ogrt = new Ogretmen { Ad = "Hakan", Soyad = "Demir", Ogretmenid = 1 };
-            }
-            else if (id == 2)
-            {
-                ogrenci = new Ogrenci { Ad = "Ahmet", Soyad = "Mehmet", Ogrenciid = 2 };
-                ogrt = new Ogretmen { Ad = "Osman", Soyad = "Yılmaz", Ogretmenid = 2 };
-            }
-            ViewData["ogr"] = ogrenci;
-            ViewBag.Student = ogrenci;
-            ViewBag.Teacher = ogrt;
+        //public ViewResult OgrenciDetay(int id)
+        //{
+        //    Ogrenci ogrenci = null;
+        //    Ogretmen ogrt = null;
+        //    if (id == 1)
+        //    {
+        //        ogrenci = new Ogrenci { Ad = "Ali", Soyad = "Veli", Ogrenciid = 1 };
+        //        ogrt = new Ogretmen { Ad = "Hakan", Soyad = "Demir", Ogretmenid = 1 };
+        //    }
+        //    else if (id == 2)
+        //    {
+        //        ogrenci = new Ogrenci { Ad = "Ahmet", Soyad = "Mehmet", Ogrenciid = 2 };
+        //        ogrt = new Ogretmen { Ad = "Osman", Soyad = "Yılmaz", Ogretmenid = 2 };
+        //    }
+        //    ViewData["ogr"] = ogrenci;
+        //    ViewBag.Student = ogrenci;
+        //    ViewBag.Teacher = ogrt;
 
-            var dto = new OgrenciDetayDTO { Ogrenci = ogrenci, Ogretmen = ogrt };
+        //    var dto = new OgrenciDetayDTO { Ogrenci = ogrenci, Ogretmen = ogrt };
 
-            return View(dto);
-        }
+        //    return View(dto);
+        //}
 
         public ViewResult OgrenciListe()
         {
-            var lst = new List<Ogrenci>
+            using (var ctx = new OkulDbContext())
             {
-                 new Ogrenci { Ad = "Ahmet", Soyad = "Mehmet", Ogrenciid = 2 },
-                 new Ogrenci { Ad = "Ali", Soyad = "Veli", Ogrenciid = 1 }
-            };
-
-            return View(lst);
+                var lst = ctx.Ogrenciler.ToList();
+                return View(lst);
+            }
         }
 
         [HttpGet]
@@ -73,6 +72,27 @@ namespace Sube2.HelloMvc.Controllers
                 TempData["sonuc"] = false;
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult OgrenciDetay(int id)
+        {
+            using (var ctx = new OkulDbContext())
+            {
+                var ogr = ctx.Ogrenciler.Find(id);
+                return View(ogr);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult OgrenciDetay(Ogrenci ogr)
+        {
+            using (var ctx=new OkulDbContext())
+            {
+                ctx.Entry(ogr).State = EntityState.Modified;
+                ctx.SaveChanges();
+            }
+            return RedirectToAction("OgrenciListe");
         }
     }
 }

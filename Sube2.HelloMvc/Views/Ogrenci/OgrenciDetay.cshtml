@@ -1,50 +1,20 @@
-﻿@model OgrenciDetayDTO
+﻿@model Ogrenci
 @{
-    ViewData["Title"] = $"Ogrenci Detay Sayfası:{Model.Ogrenci.Ad}";
-    ViewBag.Description = $"{Model.Ogrenci.Ad} {Model.Ogrenci.Soyad} ile ilgili bilgiler";
+    ViewData["Title"] = "OgrenciDetay";
 }
 
+<h1>Ogrenci Detay</h1>
 
-@if (ViewData["ogr"] != null && ViewBag.Teacher != null)
-{
-    <p>
-        ViewData'nın getirdiği bilgi: @(((Ogrenci)ViewData["ogr"]!).Ad)
-    </p>
-    <p>
-        Danışman İsmi:@ViewBag.Teacher.Ad
-    </p>
-}
-else
-{
-    <p>Öğrenci Bulunamadı!</p>
-}
-
-@if (ViewBag.Student != null && ViewBag.Teacher != null)
-{
-    <p>
-        ViewBag'in getirdiği bilgi: @ViewBag.Student.Ad
-    </p>
-    <p>
-        Danışman İsmi:@ViewBag.Teacher.Ad
-    </p>
-}
-else
-{
-    <p>Öğrenci Bulunamadı!</p>
-}
-
-@if (Model != null)
-{
-    <p>
-        Model'in getirdiği öğrenci bilgisi: @Model.Ogrenci.Ad
-    </p>
-    <p>
-        Model'in getirdiği danışman bilgisi: @Model.Ogretmen.Ad
-    </p>
-}
-else
-{
-    <p>Öğrenci Bulunamadı!</p>
-}
-
+<form asp-action="OgrenciDetay" asp-controller="Ogrenci" method="post">
+    <input type="hidden" asp-for="Ogrenciid" />
+    <div class="mb-3">
+        <label class="form-label" asp-for="Ad"></label>
+        <input class="form-control" type="text" asp-for="Ad" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Soyad"></label>
+        <input class="form-control" type="text" asp-for="Soyad" />
+    </div>
+    <input type="submit" class="btn btn-success" value="Kaydet" />
+</form>
 
