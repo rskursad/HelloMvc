@@ -5,16 +5,16 @@
 
 <h1>Ogrenci Ekle</h1>
 
-<form asp-action="OgrenciEkle" asp-controller="Ogrenci" method="post">
+<form id="frmOgrenciEkle" method="post">
     <div class="mb-3">
-        <label class="form-label" asp-for="Ad"></label>
-        <input class="form-control" type="text" asp-for="Ad" />
+        <label class="form-label"  >Ad</label>
+        <input class="form-control" type="text" id="ad" name="ad" />
     </div>
     <div class="mb-3">
-        <label class="form-label" asp-for="Soyad"></label>
-        <input class="form-control" type="text" asp-for="Soyad" />
+        <label class="form-label">Soyad</label>
+        <input class="form-control" type="text" id="soyad" name="soyad" />
     </div>
-    <input type="submit" class="btn btn-success" value="Kaydet" />
+    <input id="btnOgrenciEkle" type="submit" class="btn btn-success" value="Kaydet" />
 </form>
 
 @if (TempData["sonuc"] != null && (bool)TempData["sonuc"]! == true)
@@ -29,5 +29,47 @@ else if (TempData["sonuc"] != null && (bool)TempData["sonuc"]! == false)
         alert('Öğrenci Ekleme Başarısız!');
     </script>
 }
+@section Scripts{
+    <script>
+       
 
+        function postOgrenciEkle(){
+            var sonUrl=KokUrl+'/ogrenci/ajaxogrenciekle'
+
+                var formData=$('#frmOgrenciEkle').serialize();
+                
+                $.ajax({
+                    url:sonUrl,
+                    type:'POST',
+                    dataType:'json',
+                    data:formData,
+                    async:true,
+                    success:function (veri){
+                        let html='';
+                        if(veri){
+                            console.log(veri)
+                            alert('Öğrenci ekleme işlemi başarılı')
+                        }
+                        else{
+                            console.log(veri)
+                            alert('Öğrenci ekleme işlemi başarısız')
+                        }
+                    },
+                    error:function(xhr,status,error){
+                        console.log(xhr)
+                        console.log(status)
+                        console.log(error)
+                    }
+
+                    
+                })
+
+        }
+        document.getElementById('btnOgrenciEkle').onclick=function(e){
+            e.preventDefault()
+            postOgrenciEkle()
+        };
+    </script>
+
+}
 

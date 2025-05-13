@@ -5,8 +5,14 @@ using Sube2.HelloMvc.Models.ViewModels;
 
 namespace Sube2.HelloMvc.Controllers
 {
+    
     public class OgrenciController : Controller
     {
+        private readonly OkulDbContext _context;
+        public OgrenciController(OkulDbContext context)
+        {
+            _context = context;
+        }
         public ViewResult Index()//Action
         {
             return View("AnaSayfa");
@@ -35,13 +41,17 @@ namespace Sube2.HelloMvc.Controllers
         //    return View(dto);
         //}
 
-        public ViewResult OgrenciListe()
+        public IActionResult AjaxOgrenciListe()
         {
-            using (var ctx = new OkulDbContext())
-            {
-                var lst = ctx.Ogrenciler.ToList();
-                return View(lst);
-            }
+            var lst = _context.Ogrenciler.ToList();
+
+            return Ok(lst);
+        }
+        public IActionResult OgrenciListe()
+        { 
+                var lst = _context.Ogrenciler.ToList();
+            Ok(lst);
+                return View(lst); 
         }
 
         [HttpGet]
@@ -49,50 +59,118 @@ namespace Sube2.HelloMvc.Controllers
         {
             return View();
         }
-
         [HttpPost]
-        public ViewResult OgrenciEkle(Ogrenci ogr)
+        public IActionResult AjaxOgrenciEkle(Ogrenci ogr)
         {
-            int sonuc = 0;
-            if (ogr != null)
+            try
             {
-                using (var ctx = new OkulDbContext())
+                int sonuc = 0;
+                if (ogr != null)
                 {
-                    ctx.Ogrenciler.Add(ogr);
-                    sonuc = ctx.SaveChanges();
+                    _context.Ogrenciler.Add(ogr);
+                    sonuc = _context.SaveChanges();
                 }
-            }
 
-            if (sonuc > 0)
-            {
-                TempData["sonuc"] = true;
+
+                return Ok(true);
             }
-            else
+            catch (Exception ex)
             {
-                TempData["sonuc"] = false;
+                return BadRequest(ex.Message);
             }
-            return View();
         }
+
+        //[HttpPost]
+        //public ViewResult OgrenciEkle(Ogrenci ogr)
+        //{
+        //    int sonuc = 0;
+        //    if (ogr != null)
+        //    { 
+        //            _context.Ogrenciler.Add(ogr);
+        //            sonuc = _context.SaveChanges(); 
+        //    }
+
+        //    if (sonuc > 0)
+        //    {
+        //        TempData["sonuc"] = true;
+        //    }
+        //    else
+        //    {
+        //        TempData["sonuc"] = false;
+        //    }
+        //    return View();
+        //}
+
+        
 
         [HttpGet]
-        public IActionResult OgrenciDetay(int id)
+        public IActionResult OgrenciDetay()
+        { 
+                return View(); 
+        }
+
+        public IActionResult ajaxOgrenciBul(int id)
         {
-            using (var ctx = new OkulDbContext())
+            try
             {
-                var ogr = ctx.Ogrenciler.Find(id);
-                return View(ogr);
+                var ogr=_context.Ogrenciler.Find(id);
+                if (ogr != null)
+                {
+                    return Ok(ogr);
+                }
+                else return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
+        //[HttpPost]
+        //public IActionResult OgrenciDetay(Ogrenci ogr)
+        //{ 
+        //        _context.Entry(ogr).State = EntityState.Modified;
+        //        _context.SaveChanges(); 
+        //    return RedirectToAction("OgrenciListe");
+        //}
         [HttpPost]
-        public IActionResult OgrenciDetay(Ogrenci ogr)
+        public IActionResult AjaxOgrenciGuncelle(Ogrenci ogr)
         {
-            using (var ctx=new OkulDbContext())
+            try
             {
-                ctx.Entry(ogr).State = EntityState.Modified;
-                ctx.SaveChanges();
+                _context.Ogrenciler.Update(ogr);
+                var sonuc = _context.SaveChanges();
+                return sonuc > 0 ? Ok(true) : Ok(false);
             }
-            return RedirectToAction("OgrenciListe");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        } 
+        public IActionResult AjaxOgrenciSil(int id)
+        {
+            try
+            {
+                var ogr = _context.Ogrenciler.Find(id);
+                if (ogr!=null)
+                {
+                    _context.Ogrenciler.Remove(ogr);
+                    var sonuc= _context.SaveChanges();
+                    return Ok(true);
+                }
+                else
+                {
+                    return NotFound();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
         }
     }
 }

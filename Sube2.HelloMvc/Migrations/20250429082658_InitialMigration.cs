@@ -5,7 +5,7 @@
 namespace Sube2.HelloMvc.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

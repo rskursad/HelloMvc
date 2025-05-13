@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<Ogrenci>
 @{
-    Layout = "_Layout1";
+    Layout = "_Layout";
 }
 
-<h3>Öğrenci Listesi</h3>
+@* <h3>Öğrenci Listesi</h3>
 <ul>
     @foreach (var ogr in Model)
     {
-        <li>@ogr.Ad @ogr.Soyad</li>
+        <li>@ogr.ad @ogr.soyad</li>
     }
-</ul>
+</ul> *@
 
 <h3>Öğrenci Listesi - Table örneği</h3>
-<table border="1">
+<table class="table table-striped table-bordered" border="1">
     <thead>
         <tr>
             <th>Ogrenci Id</th>
@@ -21,8 +21,11 @@
             <th>İşlem</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var ogr in Model)
+    <tbody id="tbody">
+        <tr>
+            <td colspan="4">Yükleniyor</td>
+        </tr>
+        @* @foreach (var ogr in Model)
         {
             <tr>
                 <td>@ogr.Ogrenciid</td>
@@ -30,7 +33,99 @@
                 <td>@ogr.Soyad</td>
                 <td><a href="/Ogrenci/OgrenciDetay/@ogr.Ogrenciid">Detay</a></td>
             </tr>
-        }
+        } *@ 
     </tbody>
 </table>
+@section Scripts {
+    <script>
+
+
+        async function getOgrenciler(){
+            var sonUrl=KokUrl+'/ogrenci/ajaxogrenciliste';
+
+         await $.ajax({
+            url: sonUrl,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let html='';
+                console.log(data)
+               if(Array.isArray(data)){
+                   console.log("gelen veri dizidir")
+               }
+               else{
+                   console.log("gelen veri dizi değil")
+               }
+              data.forEach((ogr)=>{
+                  console.log(ogr)
+                  console.log(String( ogr.ad))
+                  html+=`
+                        <tr>
+                            <td>${ogr.ogrenciId}</td>
+                            <td>${ogr.ad }</td>
+                            <td>${ogr.soyad }</td>
+                            <td><a class="btn btn-success" onclick="guncelleSayfasi(${ogr.ogrenciId })">Detay</a><a  class="btn btn-warning btnSil"  onclick="silOgrenci(${ogr.ogrenciId},'${ogr.ad} ${ogr.soyad}')">Sil</a></td>
+                        </tr>  `;
+              });
+              $('#tbody').html(html);
+            },
+            error: function (xhr, status, error) {
+              $('#tbody').html(
+                `<tr>
+                    <td>${error} </td>
+                    <td>${status} </td>
+                    <td>${xhr.readyState} </td>
+                    <td>null </td>
+                </tr>`
+              );
+            }
+        });
+        }
+
+        async function guncelleSayfasi(id){
+            var sonUrl=KokUrl+'/Ogrenci/ajaxOgrenciBul/'+id
+            const ogr= await $.ajax({
+                url:sonUrl,
+                type:'GET',
+                dataType:'json'
+            })
+            console.log(ogr);
+            window.localStorage.setItem('guncellenenOgrenci',JSON.stringify(ogr))
+            var guncelleUrl=KokUrl+'/ogrenci/ogrencidetay';
+            window.location.href=guncelleUrl;
+
+        }
+
+        async function silOgrenci(id,silinecekKisi){
+            var sonUrl=KokUrl+'/Ogrenci/ajaxogrencisil/'+id;
+            var onay=  confirm(silinecekKisi+' isimli öğrenci silinecek. Onaylıyor musunuz?');
+            if(onay===true){
+               await $.ajax({
+                url:sonUrl,
+                type:'GET',
+                dataType:'json',
+                success:function(data){
+                    alert(silinecekKisi+' isimli öğrenci silindi!')
+                    getOgrenciler();
+                },
+                error:function(xhr,status,error){
+                    console.log(error);
+                    console.log(status);
+                    console.log(xhr.responseText)
+                }
+            })
+            }
+
+        }
+
+         $('.btnSil').click(function(e){
+             e.preventDefault();
+         })
+
+         $(document).ready( function () {
+            getOgrenciler();
+        });
+
+    </script>
+}
 

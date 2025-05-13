@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sube2.HelloMvc.Models;
 
@@ -10,9 +11,11 @@ using Sube2.HelloMvc.Models;
 namespace Sube2.HelloMvc.Migrations
 {
     [DbContext(typeof(OkulDbContext))]
-    partial class OkulDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429082658_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,23 +26,23 @@ namespace Sube2.HelloMvc.Migrations
 
             modelBuilder.Entity("Sube2.HelloMvc.Models.Ogrenci", b =>
                 {
-                    b.Property<int>("ogrenciId")
+                    b.Property<int>("Ogrenciid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ogrenciId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ogrenciid"));
 
-                    b.Property<string>("ad")
+                    b.Property<string>("Ad")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar");
 
-                    b.Property<string>("soyad")
+                    b.Property<string>("Soyad")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar");
 
-                    b.HasKey("ogrenciId");
+                    b.HasKey("Ogrenciid");
 
                     b.ToTable("tblOgrenciler", (string)null);
                 });

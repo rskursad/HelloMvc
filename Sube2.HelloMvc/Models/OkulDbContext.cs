@@ -6,18 +6,15 @@ namespace Sube2.HelloMvc.Models
     {
         public DbSet<Ogrenci> Ogrenciler { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=OkulDBMVCSube2;Integrated Security=true;TrustServerCertificate=true");
-        }
+
+        public OkulDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Ogrenci>().ToTable("tblOgrenciler");
-            modelBuilder.Entity<Ogrenci>().Property(o=>o.Ad).HasColumnType("varchar").HasMaxLength(30).IsRequired();
-            modelBuilder.Entity<Ogrenci>().Property(o => o.Soyad).HasColumnType("varchar").HasMaxLength(40).IsRequired();
+            modelBuilder.Entity<Ogrenci>().Property(o=>o.ad).HasColumnType("varchar").HasMaxLength(30).IsRequired();
+            modelBuilder.Entity<Ogrenci>().Property(o => o.soyad).HasColumnType("varchar").HasMaxLength(40).IsRequired();
         }
     }
 }

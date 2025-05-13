@@ -11,8 +11,8 @@ using Sube2.HelloMvc.Models;
 namespace Sube2.HelloMvc.Migrations
 {
     [DbContext(typeof(OkulDbContext))]
-    [Migration("20250325080552_InitDB")]
-    partial class InitDB
+    [Migration("20250510151308_OgrenciClassUpdate")]
+    partial class OgrenciClassUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,23 +26,23 @@ namespace Sube2.HelloMvc.Migrations
 
             modelBuilder.Entity("Sube2.HelloMvc.Models.Ogrenci", b =>
                 {
-                    b.Property<int>("Ogrenciid")
+                    b.Property<int>("ogrenciId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ogrenciid"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ogrenciId"));
 
-                    b.Property<string>("Ad")
+                    b.Property<string>("ad")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar");
 
-                    b.Property<string>("Soyad")
+                    b.Property<string>("soyad")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar");
 
-                    b.HasKey("Ogrenciid");
+                    b.HasKey("ogrenciId");
 
                     b.ToTable("tblOgrenciler", (string)null);
                 });

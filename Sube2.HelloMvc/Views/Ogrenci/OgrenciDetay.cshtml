@@ -3,18 +3,70 @@
     ViewData["Title"] = "OgrenciDetay";
 }
 
-<h1>Ogrenci Detay</h1>
+<h1 class="text-center text-primary mb-4">Öğrenci Detay</h1>
 
-<form asp-action="OgrenciDetay" asp-controller="Ogrenci" method="post">
-    <input type="hidden" asp-for="Ogrenciid" />
-    <div class="mb-3">
-        <label class="form-label" asp-for="Ad"></label>
-        <input class="form-control" type="text" asp-for="Ad" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label" asp-for="Soyad"></label>
-        <input class="form-control" type="text" asp-for="Soyad" />
-    </div>
-    <input type="submit" class="btn btn-success" value="Kaydet" />
-</form>
+<div class="container">
+    <form id="frmOgrenciGuncelle"  method="post" class="p-4 shadow rounded bg-light">
+        <input type="hidden"   id="ogrenciId" name="ogrenciId" />
 
+        <div class="mb-3">
+            <label class="form-label fw-bold" for="ad"></label>
+            <input class="form-control border-primary"  id="ad" name="ad" placeholder="Adınızı girin" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold" for="soyad"></label>
+            <input class="form-control border-primary" type="text"  id="soyad" name="soyad" placeholder="Soyadınızı girin" />
+        </div>
+
+        <div class="text-center">
+            <input id="btnOgrenciGuncelle" type="submit" class="btn btn-success px-4 py-2" value="Güncelle" />
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+         
+        document.getElementById('btnOgrenciGuncelle').onclick=function(e){
+            e.preventDefault()
+            postOgrenciGuncelle()
+        };
+        function postOgrenciGuncelle(){
+            var sonUrl=KokUrl+'/ogrenci/ajaxogrenciguncelle';
+
+            var formData=$('#frmOgrenciGuncelle').serialize();
+
+            $.ajax({
+                url:sonUrl,
+                data:formData,
+                type:'POST',
+                dataType:'json',
+                success:function(veri){
+                    if(veri){
+                        alert('Güncelleme işlemi başarılı')
+                        
+                    }
+                    else{
+                        alert('Güncelleme işlemi başarısız')
+                    }
+                },
+                error:function(xhr,status,error){
+                    alert('Hata:${error}')
+                }
+            });
+
+        } 
+        $(document).ready(function(){
+            var veri=window.localStorage.getItem('guncellenenOgrenci')
+            var ogr=JSON.parse(veri);
+            console.log(ogr)
+                    $('#ogrenciId').val(ogr.ogrenciId);
+        $('#ad').val(ogr.ad);
+        $('#soyad').val(ogr.soyad)
+
+        })
+     
+    </script>
+    
+}
