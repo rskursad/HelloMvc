@@ -49,8 +49,7 @@ namespace Sube2.HelloMvc.Controllers
         }
         public IActionResult OgrenciListe()
         { 
-                var lst = _context.Ogrenciler.ToList();
-            Ok(lst);
+                var lst = _context.Ogrenciler.ToList(); 
                 return View(lst); 
         }
 
